@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on Dustin Pedlow</title>
+    <link>https://dustinpedlow.xyz/tags/</link>
+    <description>Recent content in Tags on Dustin Pedlow</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sat, 09 Dec 2023 11:12:40 -0600</lastBuildDate><atom:link href="https://dustinpedlow.xyz/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Workstation</title>
+      <link>https://dustinpedlow.xyz/tags/workstation/</link>
+      <pubDate>Sat, 09 Dec 2023 11:12:40 -0600</pubDate>
+      
+      <guid>https://dustinpedlow.xyz/tags/workstation/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Security</title>
+      <link>https://dustinpedlow.xyz/tags/security/</link>
+      <pubDate>Sun, 29 Oct 2023 20:52:22 -0500</pubDate>
+      
+      <guid>https://dustinpedlow.xyz/tags/security/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Tutorials</title>
+      <link>https://dustinpedlow.xyz/tags/tutorials/</link>
+      <pubDate>Sun, 29 Oct 2023 20:52:22 -0500</pubDate>
+      
+      <guid>https://dustinpedlow.xyz/tags/tutorials/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Website</title>
+      <link>https://dustinpedlow.xyz/tags/website/</link>
+      <pubDate>Sun, 24 Sep 2023 22:10:39 -0500</pubDate>
+      
+      <guid>https://dustinpedlow.xyz/tags/website/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Website on Dustin Pedlow</title>
+    <link>https://dustinpedlow.xyz/tags/website/</link>
+    <description>Recent content in Website on Dustin Pedlow</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sun, 24 Sep 2023 22:10:39 -0500</lastBuildDate><atom:link href="https://dustinpedlow.xyz/tags/website/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How to Setup a OpenBSD Website</title>
+      <link>https://dustinpedlow.xyz/home/how-to-setup-a-openbsd-website/</link>
+      <pubDate>Sun, 24 Sep 2023 22:10:39 -0500</pubDate>
+      
+      <guid>https://dustinpedlow.xyz/home/how-to-setup-a-openbsd-website/</guid>
+      <description>This is a simple tutorial on creating a website in the cloud using OpenBSD, HTTPD and HUGO. This is based on the same steps I used to create the website you&amp;rsquo;re reading this on. My main focus was on security, minimalism and reliability. I choose OpenBSD because It has amazing security settings out of the box and it&amp;rsquo;s very lightweight. This tutorial assumes you are a beginner but have some basic knowledge of DNS and unix commands.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <title>How to Setup a OpenBSD Website // Dustin Pedlow</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.111.3">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="dustin pedlow" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="/css/main.min.5cf0c8bc065f08ef2a53c485f48a0ec3a8b299e389d4eb9fb7708dfc2e6de2ef.css" />
+
+    
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="How to Setup a OpenBSD Website"/>
+<meta name="twitter:description" content="This is a simple tutorial on creating a website in the cloud using OpenBSD, HTTPD and HUGO. This is based on the same steps I used to create the website you&rsquo;re reading this on. My main focus was on security, minimalism and reliability. I choose OpenBSD because It has amazing security settings out of the box and it&rsquo;s very lightweight. This tutorial assumes you are a beginner but have some basic knowledge of DNS and unix commands."/>
+
+    <meta property="og:title" content="How to Setup a OpenBSD Website" />
+<meta property="og:description" content="This is a simple tutorial on creating a website in the cloud using OpenBSD, HTTPD and HUGO. This is based on the same steps I used to create the website you&rsquo;re reading this on. My main focus was on security, minimalism and reliability. I choose OpenBSD because It has amazing security settings out of the box and it&rsquo;s very lightweight. This tutorial assumes you are a beginner but have some basic knowledge of DNS and unix commands." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://dustinpedlow.xyz/home/how-to-setup-a-openbsd-website/" /><meta property="article:section" content="home" />
+<meta property="article:published_time" content="2023-09-24T22:10:39-05:00" />
+<meta property="article:modified_time" content="2023-09-24T22:10:39-05:00" />
+
+
+  </head>
+  <body>
+    <header class="app-header">
+      <a href="https://dustinpedlow.xyz"><img class="app-header-avatar" src="/avatar.jpg" alt="dustin pedlow" /></a>
+      <span class="app-header-title">Dustin Pedlow</span>
+      <nav class="app-header-menu">
+          <a class="app-header-menu-item" href="/">Home</a>
+             - 
+          
+          <a class="app-header-menu-item" href="/tags/">Tags</a>
+             - 
+          
+          <a class="app-header-menu-item" href="/about/">About</a>
+      </nav>
+      <p>Proudly Powered by HUGO, HTTPD and OpenBSD</p>
+      <div class="app-header-social">
+        
+          <a href="https://github.com/DustinPedlow" target="_blank" rel="noreferrer noopener me">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-github">
+  <title>Github</title>
+  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+</svg>
+          </a>
+        
+          <a href="https://www.linkedin.com/in/dustin-pedlow-3b8702272/" target="_blank" rel="noreferrer noopener me">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-linkedin">
+  <title>linkedin</title>
+  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle>
+</svg>
+          </a>
+        
+          <a href="https://www.instagram.com/dustin.pedlow/" target="_blank" rel="noreferrer noopener me">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-instagram">
+  <title>Instagram</title>
+  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+</svg>
+          </a>
+        
+      </div>
+    </header>
+    <main class="app-container">
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class ="post-title">How to Setup a OpenBSD Website</h1>
+      <div class="post-meta">
+        <div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-calendar">
+  <title>calendar</title>
+  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line>
+</svg>
+          Sep 24, 2023
+        </div>
+        <div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-clock">
+  <title>clock</title>
+  <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
+</svg>
+          11 min read
+        </div>
+        <div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tag">
+  <title>tag</title>
+  <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line>
+</svg>
+              <a class="tag" href="https://dustinpedlow.xyz/tags/website/">Website</a>
+              <a class="tag" href="https://dustinpedlow.xyz/tags/tutorials/">Tutorials</a>
+        </div>
+      </div>
+    </header>
+    <div class="post-content">
+      <hr>
+<p>This is a simple tutorial on creating a website in the cloud using OpenBSD, HTTPD and HUGO. This is based on the same steps I used to create the website you&rsquo;re reading this on. My main focus was on security, minimalism and reliability. I choose OpenBSD because It has amazing security settings out of the box and it&rsquo;s very lightweight. This tutorial assumes you are a beginner but have some basic knowledge of DNS and unix commands. If not Google and ChatGTP is your friend!</p>
+<p>With all that being said let&rsquo;s get started!</p>
+</br>
+<h1 id="prerequisites">Prerequisites</h1>
+<hr>
+<ul>
+<li>Cloud Provider</li>
+<li>Domain Name</li>
+<li>A OpenBSD ISO (depending on cloud provider)</li>
+</ul>
+</br>
+<h1 id="step-1-installation">Step 1: Installation</h1>
+<hr>
+<p>Login to your cloud provider and create a new machine. I recommend doing the cheapest plan in area close to you. The cloud allows you to easily add more hardware resources but it is hard to downgrade your plan so choose wisely. I personally am using Vultr and deploying a new OpenBSD instance is as easy as clicking your hardware plan, selecting your location and choosing OpenBSD as your OS. After that you can startup the server and wait a few minutes as it takes some time for the server to initially bootup.</p>
+</br>
+<h1 id="step-21-dns---setup-a-and-aaaa-records">Step 2.1: DNS - Setup A and AAAA Records</h1>
+<hr>
+<p>This is going to look different on what domain registrar you&rsquo;re using, but the theory is all the same. We are going to setup A and AAAA records on our domain registrar which is Epik in my case. You&rsquo;ll need to go to your cloud hosting account and find your IPv4 and IPv6 address. Now that you have those we&rsquo;ll setup A and AAAA records for your domain. The main three that are typically setup for a website are blank, www and *. To setup these records go into your domain registrar and add those records as shown below:</p>
+<p><img src="/How-to-setup-a-OpenBSD-website/Epik-A-Records.png" alt="Epik-A-Records"></p>
+</br>
+<h1 id="step-22-dns---verify-dns-resolution">Step 2.2: DNS - Verify DNS resolution</h1>
+<hr>
+<p>After you have setup the A and AAAA records we need to check if they are correct by using the command</p>
+<pre><code>nslookup yourdomain.com
+</code></pre>
+<p>If you setup the DNS records correctly you should see something like</p>
+<pre><code>Non-authoritative answer:
+Name:	yourdomain.com
+Address: IPv4
+Name:	yourdomain.com
+Address: IPv6
+</code></pre>
+<p>If instead you see the command return</p>
+<pre><code>server can't find yourdomain.com: NXDOMAIN
+</code></pre>
+<p>You may need to wait for the A and AAAA records to update or you need to go back and check that you correctly set your A and AAAA records.</p>
+</br>
+<h1 id="step-3-login-to-ssh">Step 3: Login to SSH</h1>
+<hr>
+<p>Now that you&rsquo;ve setup DNS you can ssh into your server using it&rsquo;s domain name. Now login to your server by checking for your root password on your cloud dashboard and then login to your sever using the root user by typing</p>
+<pre><code>ssh root@yourdomain.com
+</code></pre>
+</br>
+<h1 id="step-4-creating-and-modifying-users-and-groups">Step 4: Creating and modifying users and groups</h1>
+<hr>
+<p>The root user is meant for administrative purposes only and your name isn&rsquo;t root is it? Create your own account by typing</p>
+<pre><code>adduser yourname
+</code></pre>
+<p>After completing those steps type in <em><strong>exit</strong></em> or use <em><strong>Ctrl+d</strong></em> until you have returned to your local computer&rsquo;s terminal.</p>
+</br>
+<h1 id="step-51-creating-a-keypair-for-ssh">Step 5.1: Creating a keypair for ssh</h1>
+<hr>
+<p>One of the most common attack vectors is ssh. This is the most commonly done as a brute-force attack in which a automated script tries thousands of common usernames and passwords to try to access the root, admin and other common usernames of webservers. Disabling the root user&rsquo;s ssh abilities and using key pair authentication will do a lot to mitigate these attacks and is very easy to do. I will do an example of setting up ssh keys on Debian Linux since that is my desktop operating system. To create a keypair use the command</p>
+<pre><code>ssh-keygen
+</code></pre>
+<p>Use the Default settings and setup you&rsquo;re own password for your key. I would recommend naming it something unique so you remember that is your key for the webserver.</p>
+</br>
+<p>Then we will need to copy your public key to your server by typing the command</p>
+<pre><code>scp /home/yourname/.ssh/id_rsa.pub yourname@yourdomain.com::/home/yourname
+</code></pre>
+</br>
+<p>Then ssh back into the cloud server with the command</p>
+<pre><code>ssh root@yourdomain.com
+</code></pre>
+</br>
+<p>Now as your user move the your public key into the ssh authorized hosts file.</p>
+<pre><code>mv ~/.ssh/id_rsa.pub ~/.ssh/authorized_keys &amp;&amp; chmod 440 ~/.ssh/authorized_keys
+</code></pre>
+<p>Now your public key to trusted as a host to connected to your server via ssh.</p>
+</br>
+<h1 id="step-52-configuring-ssh-key-authentication">Step 5.2: Configuring ssh key authentication</h1>
+<hr>
+<p>Now we are going to edit the ssh configuration to use this key for your user authentication. To do this we&rsquo;ll edit <em><strong>/etc/ssh/sshd_config</strong></em> by typing the following command:</p>
+<pre><code>nvim /etc/ssh/sshd_config
+</code></pre>
+<p>(Replace NeoVim with nano or whatever text editor you use. If you are a beginner I&rsquo;d recommend using nano.)</p>
+<p>Now your editing <em><strong>/etc/ssh/sshd_config</strong></em> you&rsquo;ll want to change the following</p>
+<p>Find <em><strong>#PermitRootLogin</strong></em> and change it to <em><strong>PermitRootLogin no</strong></em></p>
+<p>Then find <em><strong>#PasswordAuthentication yes</strong></em> and change it to <em><strong>PasswordAuthentication no</strong></em></p>
+<p>That is all the changes needed. <em><strong>Write the changes</strong></em> to the file and <em><strong>exit</strong></em>.</p>
+</br>
+<p>To apply these settings you&rsquo;ll need to restart ssh with the command</p>
+<pre><code>rcctl restart sshd
+</code></pre>
+</br>
+<p>(Note: Now that you are done securing ssh you&rsquo;ll no longer be able to login using root. You&rsquo;ll need to use <em><strong><a href="mailto:yourname@yourdomain.com">yourname@yourdomain.com</a></strong></em> to ssh into your server. The upside is that key authentication will be a lot more secure than just a password. You&rsquo;ll need to remember that you&rsquo;ll have to either setup <em><strong>doas</strong></em> or use the <em><strong>su</strong></em> to access root privileges.)</p>
+</br>
+<h1 id="step-61-setting-up-httpd-configuration-files">Step 6.1: Setting up HTTPD Configuration files</h1>
+<hr>
+<p>Now you&rsquo;ll need to setup HTTPD by first entering the configuration file by using the following command:</p>
+<pre><code>nvim /etc/httpd.conf
+</code></pre>
+<p>then add:</p>
+<pre><code>server &quot;www.yourdomain.com&quot; {
+  listen on * port 80
+  root &quot;/htdocs/www.yourdomain.com&quot;
+  location &quot;/.well-known/acme-challenge/*&quot; {
+	    root &quot;/acme&quot;
+	    request strip 2
+  }
+}
+
+server &quot;yourdomain.com&quot; {
+  listen on * port 80
+  block return 301 &quot;http://www.yourdomain.com$REQUEST_URI&quot;
+}
+</code></pre>
+<p>Then write the changes to the file and exit.</p>
+</br>
+<h1 id="step-62-creating-a-http-site">Step 6.2: Creating a http site</h1>
+<hr>
+<p>You&rsquo;ll need to make a new directory under <em><strong>/var/www/htdocs/</strong></em> to serve your website. To create a new directory used the following command:</p>
+<pre><code>mkdir -p /var/www/htdocs/www.yourdomain.com
+</code></pre>
+</br>
+<p>Create your home file by typing in the following command:</p>
+<pre><code>nvim /var/www/htdocs/www.yourdomain.com/index.html
+</code></pre>
+</br>
+<p>Now that your in your text editor type some HTML like the following:</p>
+<pre><code>&lt;html&gt;
+	&lt;body&gt;
+		&lt;h1&gt;TEST&lt;/h1&gt;
+	&lt;body&gt;
+&lt;html&gt;
+</code></pre>
+<p>Then write the changes to the file and exit.</p>
+</br>
+<p>Now we&rsquo;ll need to start HTTPD by typing in the following command:</p>
+<pre><code>rcctl start httpd
+</code></pre>
+<p>Then we&rsquo;ll enable HTTPD at boot by typing the folowing command:</p>
+<pre><code>rcctl enable httpd
+</code></pre>
+</br>
+<h1 id="step-7-testing-dns-resolution-and-httpd">Step 7: Testing DNS resolution and HTTPD</h1>
+<hr>
+<p>The reason I got you to setup DNS names and HTTPD without https is because I want to make sure you have the basics before setting up a proper https website. Often I see people do all of the complicated steps before checking the basics. If you can&rsquo;t get a http site you&rsquo;re not going to get a https site. If you cannot get your domain name to resolve with nslookup your not going to get a website by domain name. The main point is to check for connectivity and DNS records then verify functionality before getting into a more complex setup.</p>
+<p>First start by typing in <em><strong>nslookup yourdomain.com</strong></em> into your terminal.</p>
+<p>Now try typing your website into your top search bar as a http site. An example would be: <em><strong><a href="http://exampledomain.com">http://exampledomain.com</a></strong></em></p>
+<p>If everything is working then it is time to move on to the next step. If not go back and check to make sure you&rsquo;ve done all the last steps correctly and try again.</p>
+</br>
+<h1 id="step-8-setting-up-prerequisites-for-ssl-certificates">Step 8: Setting up Prerequisites for SSL Certificates</h1>
+<hr>
+<p>First you&rsquo;ll need to create the required directories by typing in the following commands:</p>
+<pre><code>mkdir -p -m 700 /etc/acme
+mkdir -p -m 700 /etc/ssl/acme/private
+mkdir -p -m 755 /var/www/acme
+</code></pre>
+</br>
+<p>You&rsquo;ll need to create a ACME configuration file by using your text editor of choice and the typing in the following command:</p>
+<pre><code>nvim /etc/acme-client.conf
+</code></pre>
+</br>
+<p>Then you&rsquo;ll need to add the text below:</p>
+<pre><code>#
+# $OpenBSD: acme-client.conf,v 1.6 2017/11/27 01:59:55 florian Exp $
+#
+authority letsencrypt {
+    	api url &quot;https://acme-v02.api.letsencrypt.org/directory&quot;
+    	account key &quot;/etc/acme/letsencrypt-privkey.pem&quot;
+}
+
+authority letsencrypt-staging {
+    	api url &quot;https://acme-staging.api.letsencrypt.org/directory&quot;
+    	account key &quot;/etc/acme/letsencrypt-staging-privkey.pem&quot;
+}
+
+domain yourdomain.com {
+alternative names { www.yourdomain.com }
+   		domain key &quot;/etc/ssl/private/yourdomain.com.key&quot;
+   		domain certificate &quot;/etc/ssl/yourdomain.com.crt&quot;
+   		domain full chain certificate &quot;/etc/ssl/yourdomain.com.fullchain.pem&quot;
+   		sign with letsencrypt
+}
+</code></pre>
+<p>Then write the changes to the file and exit.</p>
+</br>
+<h1 id="step-91-reconfigure-httpd-and-get-certificates-installed">Step 9.1: Reconfigure HTTPD and get certificates installed</h1>
+<hr>
+<p>You need to reconfigure HTTPD to allow https. Edit /etc/httpd.conf by doing the following:</p>
+<pre><code>nvim /etc/httpd.conf
+</code></pre>
+</br>
+<p>Then add the following:</p>
+<pre><code>server &quot;www.yourdomain.com&quot; {
+  listen on * port 80
+  root &quot;/htdocs/www.yourdomain.com&quot;
+  location &quot;/.well-known/acme-challenge/*&quot; {
+	    root &quot;/acme&quot;
+	    request strip 2
+  }
+}
+
+server &quot;yourdomain.com&quot; {
+  listen on * port 80
+  block return 301 &quot;http://www.yourdomain.com$REQUEST_URI&quot;
+}
+</code></pre>
+<p>Then write the changes to the file and exit.</p>
+</br>
+<p>Now that you&rsquo;re finished editing <em><strong>/etc/httpd.conf</strong></em> you&rsquo;ll need to restart httpd. To do this type in the following command:</p>
+<pre><code>httpd -n &amp;&amp; rcctl restart httpd
+</code></pre>
+</br>
+<p>Your are now able to use ACME-Client to get your SSL certificate by typing in the following command:</p>
+<pre><code>acme-client -v yourdomain.com
+</code></pre>
+</br>
+<h1 id="step-92-final-httpd-configuration">Step 9.2: Final HTTPD configuration</h1>
+<hr>
+<p>Now that you&rsquo;ve got your SSL certificate it&rsquo;s time to setup the final HTTPD configuration. To start type in the following command:</p>
+<pre><code>nvim /etc/httpd.conf
+</code></pre>
+</br>
+<p>Then clear out the file and add the following:</p>
+<pre><code>server &quot;www.yourdomain.com&quot; {
+  listen on * tls port 443
+  root &quot;/htdocs/www.yourdomain.com&quot;
+  tls {
+	    certificate &quot;/etc/ssl/yourdomain.com.fullchain.pem&quot;
+	    key &quot;/etc/ssl/private/yourdomain.com.key&quot;
+  }
+location &quot;/.well-known/acme-challenge/*&quot; {
+  root &quot;/acme&quot;
+	  request strip 2
+  }
+}
+
+server &quot;yourdomain.com&quot; {
+  listen on * tls port 443
+  tls {
+	  certificate &quot;/etc/ssl/yourdomain.com.fullchain.pem&quot;
+	  key &quot;/etc/ssl/private/yourdomain.com.key&quot;
+  }
+block return 301 &quot;https://yourdomain.com$REQUEST_URI&quot;
+}
+
+server &quot;www.yourdomain.com&quot; {
+  listen on * port 80
+  alias &quot;yourdomain.com&quot;
+  block return 301 &quot;https://www.yourdomain.com$REQUEST_URI&quot;
+}
+</code></pre>
+<p>Then write the changes to the file and exit.</p>
+</br>
+<h1 id="step-10-schedule-certificate-renewal-with-crontab">Step 10: Schedule Certificate Renewal with Crontab</h1>
+<hr>
+<p>SSL certificates expire so you&rsquo;ll need to add a cronjob to renew your SSL certificate. To edit the crontab type in the following command:</p>
+<pre><code>crontab -e
+</code></pre>
+</br>
+<p>Now you&rsquo;ll need to add a line to renew your certificate. The line that I have used is the following:</p>
+<pre><code>0 23 * * 1 acme-client -v yourdomain.com &amp;&amp; rcctl reload httpd
+</code></pre>
+<p>Write changes to the crontab and then exit.</p>
+</br>
+<h1 id="step-11-setup-pf">Step 11: Setup PF</h1>
+<hr>
+<p>pf is easy to setup and control. To start we will create and edit pf.conf with the following command:</p>
+<pre><code>nvim /etc/pf.conf
+</code></pre>
+</br>
+<p>Clear out pf.conf and add the following:</p>
+<pre><code>#       $OpenBSD: pf.conf,v 1.55 2017/12/03 20:40:04 sthen Exp $
+#
+# See pf.conf(5) and /etc/examples/pf.conf
+
+set skip on lo
+
+block all
+pass out all
+pass in proto tcp to port 80
+pass in proto tcp to port 443
+pass in proto tcp to port 22
+</code></pre>
+<p>Then write the changes to the file and exit.</p>
+</br>
+<p>Now that you&rsquo;re done editing <em><strong>/etc/pf.conf</strong></em> you&rsquo;ll need to enable packet filtering with the following command:</p>
+<pre><code>pfctl -e
+</code></pre>
+</br>
+<p>Then test the rules with and apply them with the following command:</p>
+<pre><code>pfctl -n -f /etc/pf.conf &amp;&amp; pfctl -f /etc/pf.conf
+</code></pre>
+<p>If you get an error from the command above please go back and check your pf.conf for a misconfiguration and then run the command again before continuing.</p>
+</br>
+<h1 id="step-12-change-the-ssh-port-optional">Step 12: Change the SSH port (OPTIONAL)</h1>
+<hr>
+<p>Changing your ssh port is a extra layer of obscurity. The ports can easily be found with a simple nmap scan but it will prevent some basic automated ssh scripts from trying to login using ssh on port 22. If you do this you&rsquo;ll need to specify the port number when you use ssh or commands like rsync or scp that can use ssh.</p>
+</br>
+<p>To get started you&rsquo;ll need to edit the following configuration:</p>
+<pre><code>nvim /etc/ssh/sshd_config	
+</code></pre>
+</br>
+<p>Now find <em><strong>#Port 22</strong></em> then edit it and the following:</p>
+<pre><code>Port 12345
+</code></pre>
+<p>(Note:You can change the port number to anything that you want but I recommended for newbies to choose a ephemeral port in order to avoid conflicts)</p>
+<p>Then write the changes to the file and exit.</p>
+</br>
+<p>Before setting this new ssh port we need to make sure our firewall will allow us to ssh into the port. You will need to edit /etc/pf.conf to change port 22 to your desired ssh port and then apply the new pf.conf before continuing.</p>
+</br>
+<p>To apply these settings you&rsquo;ll need to reload sshd with the following command:</p>
+<pre><code>rcctl reload sshd
+</code></pre>
+</br>
+<h1 id="step-13-setup-sshlockout-optional">Step 13: Setup sshlockout (OPTIONAL)</h1>
+<hr>
+<p>Another step I do is to setup sshlockout. This is a extra layer of security that bans IP addresses that have reached a maximum threshold of failed password attempts. If you&rsquo;re from the Linux world this is similar to Fail2Ban and is a very simple program. This was imported to OpenBSD from DragonflyBSD and a big shout-out to them because it&rsquo;s a great lightweight tool with minimal setup. When sshlockout is in use it will ban any IP address that exceeds the threshold of 5 incorrect passwords in one hour and expire them in 1 day.</p>
+<h1 id="step-14-creating-and-deploying-your-website">Step 14: Creating and Deploying your Website</h1>
+<hr>
+<p>This is now the time to design your website. There is many different ways to make and design a website. You could code it with HTML and CSS or generate it using a static site generator. This is beyond the scope of this tutorial but I will link related guides here when I make them. I recommend Hugo since it has great documentation and lots of youtube tutorials.</p>
+<p>There is also may ways to deploy your website. You could use git or github. You can do it manually. You can also follow my tutorial on how I do it which is with a few scripts that automate the manual process and cut back on file transfers.</p>
+</br>
+<h1 id="sources">Sources</h1>
+<hr>
+<p>OpenBSD http site:</p>
+<p><a href="https://www.openbsdhandbook.com/services/webserver/basic_webserver/">https://www.openbsdhandbook.com/services/webserver/basic_webserver/</a></p>
+</br>
+<p>OpenBSD https site:</p>
+<p><a href="https://www.openbsdhandbook.com/services/webserver/basic_webserver/">https://www.openbsdhandbook.com/services/webserver/basic_webserver/</a></p>
+</br>
+<p>SSL</p>
+<p><a href="https://www.openbsdhandbook.com/services/webserver/ssl/">https://www.openbsdhandbook.com/services/webserver/ssl/</a></p>
+</br>
+<p>pf-firewall:</p>
+<p><a href="https://www.vultr.com/docs/getting-started-with-the-pf-firewall/">https://www.vultr.com/docs/getting-started-with-the-pf-firewall/</a></p>
+</br>
+<p>sshlockout:</p>
+<p><a href="https://marc.info/?l=openbsd-misc&amp;m=150936166323062&amp;w=2">https://marc.info/?l=openbsd-misc&amp;m=150936166323062&amp;w=2</a></p>
+<p><a href="https://openports.pl/path/security/sshlockout">https://openports.pl/path/security/sshlockout</a></p>
+
+    </div>
+    <div class="post-footer">
+      
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>

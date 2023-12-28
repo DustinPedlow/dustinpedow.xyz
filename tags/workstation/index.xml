@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Workstation on Dustin Pedlow</title>
+    <link>https://dustinpedlow.xyz/tags/workstation/</link>
+    <description>Recent content in Workstation on Dustin Pedlow</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sat, 09 Dec 2023 11:12:40 -0600</lastBuildDate><atom:link href="https://dustinpedlow.xyz/tags/workstation/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>My Workstation</title>
+      <link>https://dustinpedlow.xyz/home/my-workstation/</link>
+      <pubDate>Sat, 09 Dec 2023 11:12:40 -0600</pubDate>
+      
+      <guid>https://dustinpedlow.xyz/home/my-workstation/</guid>
+      <description>This is a very in depth breakdown of my workstation. I had originally had this article as bunch of mini articles and lists but it took up too much space on my website and I didn&amp;rsquo;t like having tons of articles related to my workstation.
+Desktop Gnome shell: Colliod-Dark-Dracula
+Icons: EPapirus-Dark
+Appications User Themes: Colloid-Dracula-Dark
+Gnome Extensions: Bitcoin Markets, Dash to Dock, Mullvad Indicator and User Themes
+Shortcuts I have made many shortcuts to make my Gnome desktop to switch workspaces and open commonly used applications.</description>
+    </item>
+    
+  </channel>
+</rss>
