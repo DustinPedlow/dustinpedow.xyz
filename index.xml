@@ -22,11 +22,11 @@ Shortcuts I have made many shortcuts to make my Gnome desktop to switch workspac
     
     <item>
       <title>A sshlockout Tutorial</title>
-      <link>https://dustinpedlow.xyz/home/sshlockout/</link>
+      <link>https://dustinpedlow.xyz/home/a-sshlockout-tutorial/</link>
       <pubDate>Sun, 29 Oct 2023 20:52:22 -0500</pubDate>
       
-      <guid>https://dustinpedlow.xyz/home/sshlockout/</guid>
-      <description>This is a appreciation article to sshlockout. Yep I&amp;rsquo;m a shill.
+      <guid>https://dustinpedlow.xyz/home/a-sshlockout-tutorial/</guid>
+      <description>This is a quick look at sshlockout and how to effectively use it to ban attackers.
 The sshlockout program is a extra layer of security that bans IP addresses that have reached a maximum threshold of failed password attempts. The sshlockout program originates from DragonFlyBSD and has been ported to OpenBSD. If you&amp;rsquo;re from the Linux world this is similar to Fail2Ban and is a very simple program. When sshlockout is setup using the settings shown in the manpage it will ban any IP address that exceeds 5 incorrect passwords in one hour.</description>
     </item>
     
