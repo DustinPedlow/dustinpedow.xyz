@@ -118,11 +118,9 @@ block in quick on egress proto tcp from &lt;lockout&gt; to port 22
 <p>I first tested my pf.conf to make sure there was not errors with the command:</p>
 <pre><code>pf -n -f /etc/pf.conf
 </code></pre>
-</br>
 <p>I didn&rsquo;t get any errors output to me so my configuration is good and I reloaded pf with the new config using:</p>
 <pre><code>pfctl -f /etc/pf.conf
 </code></pre>
-</br>
 <p>I then added</p>
 <pre><code>auth.info;authpriv.info | exec /usr/bin/doas -n /usr/local/sbin/sshlockout -pf &quot;lockout&quot;
 </code></pre>
