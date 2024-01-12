@@ -161,13 +161,7 @@ Shortcuts I have made many shortcuts to make my Gnome desktop to switch workspac
 <br/>
 <h2 id="power-consumption">Power Consumption</h2>
 <hr>
-<p>I used powertop which is a handy power consumption tool that can see my Cstate modes and many other settings. I found that my lowest power state my workstation can reach is C3 which knowing that I have a fairly new machine didn&rsquo;t seem quite right. I’m not really sure what is causing a C3 Cstate exactly but I’m pretty sure it is either one of my old hard drives or my SAS controller. The reason I think that is because older firmware does not support above C3 Cstates which poses an issue since my SAS card and used hard drives are not very current. I would like to also mention that all my final measurements were measured from the wall using a power meter.</p>
-<p>Startup: Pending&hellip;</p>
-<p>Idle: 92W</p>
-<p>Full CPU Load: Pending&hellip;</p>
-<p>Full GPU Load: Pending&hellip;</p>
-<p>Full CPU and GPU Load: Pending&hellip;</p>
-<p>Sleep/Standby: Pending&hellip;</p>
+<p>I used powertop which is a handy power consumption tool that can tune my power consumption and can see my Cstate modes and many other settings. I found that my lowest power state my workstation can reach is C3 which knowing that I have a fairly new machine didn&rsquo;t seem quite right. I’m not really sure what is causing a C3 Cstate exactly but I’m pretty sure it is my SAS controller. The reason I think that is because older firmware does not support above C3 Cstates and my SAS card not very current.</p>
 <br/>
 <h2 id="idle-hardware-usage">Idle hardware usage:</h2>
 <hr>
@@ -178,7 +172,7 @@ Shortcuts I have made many shortcuts to make my Gnome desktop to switch workspac
 <hr>
 <p>Before beginning this section I would like to direct you to my <a href="/home/pc-tuning">PC Tuning page</a> for reference on my opinion of overclocking/undervolting and the like. My workstation is completely stable running my workload of multiple VMs, gaming and has passed tons of 24 hour benchmarks and stress tests. It is running at default speeds but using less power which is pretty awesome since less heat means my components will last longer and my room will stay cooler!</p>
 <br/>
-<h3 id="cpu-overclock">CPU Overclock</h3>
+<h3 id="cpu-clocking">CPU Clocking</h3>
 <p>Overclocking Tool: BIOS</p>
 <p>Core Speed: Stock Clock Speeds</p>
 <p>Voltage: Vcore offset -60mV (Undervolt)</p>
@@ -190,9 +184,18 @@ Shortcuts I have made many shortcuts to make my Gnome desktop to switch workspac
 <p>Load Line Calibration: Level 2 (1 lower than default)</p>
 <p>Bios Power limit: 210W (30W lower than default)</p>
 <br/>
-<h3 id="gpu-overclock">GPU Overclock</h3>
-<p>Overclocking Tool: GreenWithEnvy (flatpak)</p>
-<p>Core Speed Offset: -10Mhz</p>
+<h3 id="gpu-clocking-on-linux">GPU Clocking on Linux</h3>
+<p>Overclocking Tool: CoreCtrl</p>
+<p>Voltage: Voltage Offset -250mV</p>
+<p>Max Core Speed: 2062MHz</p>
+<p>Memory Speed Offset: +1000Mhz</p>
+<p>Max Memory Speed: 6005MHz</p>
+<p>Power Limit: 238W</p>
+<p>Maximum Temperature: Pending&hellip;</p>
+<br/>
+<h3 id="gpu-clocking-on-windows">GPU Clocking on Windows</h3>
+<p>Overclocking Tool: AMD Radeon</p>
+<p>Voltage: Voltage Offset -1000mV</p>
 <p>Max Core Speed: 2062MHz</p>
 <p>Memory Speed Offset: +1000Mhz</p>
 <p>Max Memory Speed: 6005MHz</p>

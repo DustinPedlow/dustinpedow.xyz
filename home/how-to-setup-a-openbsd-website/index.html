@@ -114,53 +114,54 @@
 <hr>
 <p>This is going to look different on what domain registrar you&rsquo;re using, but the theory is all the same. We are going to setup A and AAAA records on our domain registrar which is Epik in my case. You&rsquo;ll need to go to your cloud hosting account and find your IPv4 and IPv6 address. Now that you have those we&rsquo;ll setup A and AAAA records for your domain. The main three that are typically setup for a website are blank, www and wildcard. To setup these records go into your domain registrar and add the records as shown below:</p>
 <p><img src="/how-to-setup-a-openbsd-website/Epik-A-Records.png" alt="Epik-A-Records"></p>
+<h5 id="please-change-the-your_ipv4-and-your_ipv6-to-your-actual-public-ip-addresses">PLEASE CHANGE THE YOUR_IPV4 AND YOUR_IPV6 TO YOUR ACTUAL PUBLIC IP ADDRESSES!!!</h5>
 </br>
 <h1 id="step-22-dns---verify-dns-resolution">Step 2.2: DNS - Verify DNS resolution</h1>
 <hr>
-<p>After you have setup the A and AAAA records we need to check if they are correct by using the command</p>
+<p>After you have setup the A and AAAA records we need to check if they are correct by using the command:</p>
 <pre><code>nslookup yourdomain.com
 </code></pre>
-<p>If you setup the DNS records correctly you should see something like</p>
+<p>If you setup the DNS records correctly you should see something like:</p>
 <pre><code>Non-authoritative answer:
 Name:	yourdomain.com
 Address: IPv4
 Name:	yourdomain.com
 Address: IPv6
 </code></pre>
-<p>If instead you see the command return</p>
+<p>If instead you see the command return:</p>
 <pre><code>server can't find yourdomain.com: NXDOMAIN
 </code></pre>
 <p>You may need to wait for the A and AAAA records to update or you need to go back and check that you correctly set your A and AAAA records.</p>
 </br>
 <h1 id="step-3-login-to-ssh">Step 3: Login to SSH</h1>
 <hr>
-<p>Now that you&rsquo;ve setup DNS you can ssh into your server using it&rsquo;s domain name. Now login to your server by checking for your root password on your cloud dashboard and then login to your sever using the root user by typing</p>
+<p>Now that you&rsquo;ve setup DNS you can ssh into your server using it&rsquo;s domain name. Now login to your server by checking for your root password on your cloud dashboard and then login to your sever using the root user by typing:</p>
 <pre><code>ssh root@yourdomain.com
 </code></pre>
 </br>
 <h1 id="step-4-creating-and-modifying-users-and-groups">Step 4: Creating and modifying users and groups</h1>
 <hr>
-<p>The root user is meant for administrative purposes only and your name isn&rsquo;t root is it? Create your own account by typing</p>
+<p>The root user is meant for administrative purposes only and your name isn&rsquo;t root is it? Create your own account by typing:</p>
 <pre><code>adduser yourname
 </code></pre>
 <p>After completing those steps type in <em><strong>exit</strong></em> or use <em><strong>Ctrl+d</strong></em> until you have returned to your local computer&rsquo;s terminal.</p>
 </br>
 <h1 id="step-51-creating-a-keypair-for-ssh">Step 5.1: Creating a keypair for ssh</h1>
 <hr>
-<p>One of the most common attack vectors is ssh. This is the most commonly done as a brute-force attack in which a automated script tries thousands of common usernames and passwords to try to access the root, admin and other common usernames of webservers. Disabling the root user&rsquo;s ssh abilities and using key pair authentication will do a lot to mitigate these attacks and is very easy to do. I will do an example of setting up ssh keys on Debian Linux since that is my desktop operating system. To create a keypair use the command</p>
+<p>One of the most common attack vectors is ssh. This is the most commonly done as a brute-force attack in which a automated script tries thousands of common usernames and passwords to try to access the root, admin and other common usernames of webservers. Disabling the root user&rsquo;s ssh abilities and using key pair authentication will do a lot to mitigate these attacks and is very easy to do. I will do an example of setting up ssh keys on Debian Linux since that is my desktop operating system. To create a keypair use the command:</p>
 <pre><code>ssh-keygen
 </code></pre>
 <p>Use the Default settings and setup you&rsquo;re own password for your key. I would recommend naming it something unique so you remember that is your key for the webserver.</p>
 </br>
-<p>Then we will need to copy your public key to your server by typing the command</p>
+<p>Then we will need to copy your public key to your server by typing the command:</p>
 <pre><code>scp /home/yourname/.ssh/id_rsa.pub yourname@yourdomain.com::/home/yourname
 </code></pre>
 </br>
-<p>Then ssh back into the cloud server with the command</p>
+<p>Then ssh back into the cloud server with the command:</p>
 <pre><code>ssh root@yourdomain.com
 </code></pre>
 </br>
-<p>Now as your user move the your public key into the ssh authorized hosts file.</p>
+<p>Now as your user move the your public key into the ssh authorized hosts file using the command:</p>
 <pre><code>mv ~/.ssh/id_rsa.pub ~/.ssh/authorized_keys &amp;&amp; chmod 440 ~/.ssh/authorized_keys
 </code></pre>
 <p>Now your public key to trusted as a host to connected to your server via ssh.</p>
@@ -176,7 +177,7 @@ Address: IPv6
 <p>Then find <em><strong>#PasswordAuthentication yes</strong></em> and change it to <em><strong>PasswordAuthentication no</strong></em></p>
 <p>That is all the changes needed. <em><strong>Write the changes</strong></em> to the file and <em><strong>exit</strong></em>.</p>
 </br>
-<p>To apply these settings you&rsquo;ll need to restart ssh with the command</p>
+<p>To apply these settings you&rsquo;ll need to restart ssh with the command:</p>
 <pre><code>rcctl restart sshd
 </code></pre>
 </br>
@@ -404,13 +405,14 @@ pass in proto tcp to port 22
 </br>
 <h1 id="step-13-setup-sshlockout-optional">Step 13: Setup sshlockout (OPTIONAL)</h1>
 <hr>
-<p>Another step I do is to setup sshlockout. This is a extra layer of security that bans IP addresses that have reached a maximum threshold of failed password attempts. If you&rsquo;re from the Linux world this is similar to Fail2Ban and is a very simple program. This was imported to OpenBSD from DragonflyBSD and a big shout-out to them because it&rsquo;s a great lightweight tool with minimal setup. When sshlockout is in use it will ban any IP address that exceeds the threshold of 5 incorrect passwords in one hour and expire them in 1 day.</p>
+<p>Another step I do is to setup sshlockout. This is a extra layer of security that bans IP addresses that have reached a maximum threshold of failed password attempts. If you&rsquo;re from the Linux world this is similar to Fail2Ban and is a very simple program. This was imported to OpenBSD from DragonflyBSD and a big shout-out to them because it&rsquo;s a great lightweight tool with minimal setup. To set this up click <a href="/home/a-sshlockout-tutorial">here</a></p>
+</br>
 <h1 id="step-14-creating-and-deploying-your-website">Step 14: Creating and Deploying your Website</h1>
 <hr>
 <p>This is now the time to design your website. There is many different ways to make and design a website. You could code it with HTML and CSS or generate it using a static site generator. This is beyond the scope of this tutorial but I will link related guides here when I make them. I recommend Hugo since it has great documentation and lots of youtube tutorials.</p>
 <p>There is also may ways to deploy your website. You could use git or github. You can do it manually. You can also follow my tutorial on how I do it which is with a few scripts that automate the manual process and cut back on file transfers.</p>
 </br>
-<h1 id="sources">Sources</h1>
+<h1 id="resources">Resources</h1>
 <hr>
 <p>OpenBSD http site:</p>
 <p><a href="https://www.openbsdhandbook.com/services/webserver/basic_webserver/">https://www.openbsdhandbook.com/services/webserver/basic_webserver/</a></p>
@@ -423,10 +425,6 @@ pass in proto tcp to port 22
 </br>
 <p>pf-firewall:</p>
 <p><a href="https://www.vultr.com/docs/getting-started-with-the-pf-firewall/">https://www.vultr.com/docs/getting-started-with-the-pf-firewall/</a></p>
-</br>
-<p>sshlockout:</p>
-<p><a href="https://marc.info/?l=openbsd-misc&amp;m=150936166323062&amp;w=2">https://marc.info/?l=openbsd-misc&amp;m=150936166323062&amp;w=2</a></p>
-<p><a href="https://openports.pl/path/security/sshlockout">https://openports.pl/path/security/sshlockout</a></p>
 
     </div>
     <div class="post-footer">

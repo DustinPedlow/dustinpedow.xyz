@@ -101,31 +101,37 @@ The sshlockout program is a extra layer of security that bans IP addresses that 
 <p>The sshlockout program is a extra layer of security that bans IP addresses that have reached a maximum threshold of failed password attempts. The sshlockout program originates from DragonFlyBSD and has been ported to OpenBSD. If you&rsquo;re from the Linux world this is similar to Fail2Ban and is a very simple program. When sshlockout is setup using the settings shown in the manpage it will ban any IP address that exceeds 5 incorrect passwords in one hour. Then the IP&rsquo;s block is expired after 1 day and it is allow to attempt login again.</p>
 <p>Before configuring sshlockout I STRONGLY recommend using RSA keys for authentication, disable password authentication and change the default ssh port to improve security. Now with that all being said let&rsquo;s get started with the installation!</p>
 </br>
-<h1 id="installation">Installation</h1>
+<h1 id="installation--configuration">Installation &amp; Configuration</h1>
 <hr>
-<p>After installing sshlockout onto OpenBSD I followed the synopsis within the manpage closely.</p>
+<p>The initial installation is done with OpenBSD&rsquo;s package manager as the root user or with root privileges using the command below:</p>
+<pre><code>pkg_add sshlockout
+</code></pre>
+<p>Now that we have installed sshlockout the is a bit of configuration that needs to be done.</p>
+</br>
+<p>Now that sshlockout is installed I followed the synopsis within the manpage closely. In order to start sshlockout we need to setup the pf configuration to use sshlockout. To get this working I did the following steps:</p>
 <p>I added</p>
 <pre><code>table &lt;lockout&gt; persist
 block in quick on egress proto tcp from &lt;lockout&gt; to port 22
 </code></pre>
-<p>onto the end of my /etc/pf.conf configuration</p>
+<p>onto the end of my /etc/pf.conf configuration.</p>
 </br>
-<p>I first tested my pf.conf to make sure there was not errors with the command</p>
+<p>I first tested my pf.conf to make sure there was not errors with the command:</p>
 <pre><code>pf -n -f /etc/pf.conf
 </code></pre>
-<p>I didn&rsquo;t get any errors output to me so my configuration is good and I reloaded pf with the new config using</p>
+</br>
+<p>I didn&rsquo;t get any errors output to me so my configuration is good and I reloaded pf with the new config using:</p>
 <pre><code>pfctl -f /etc/pf.conf
 </code></pre>
 </br>
-<p>I added</p>
+<p>I then added</p>
 <pre><code>auth.info;authpriv.info | exec /usr/bin/doas -n /usr/local/sbin/sshlockout -pf &quot;lockout&quot;
 </code></pre>
-<p>into /etc/syslog.conf</p>
+<p>into /etc/syslog.conf for logging purposes.</p>
 </br>
-<p>The last part of the sshlockout manpage&rsquo;s synopsis was to add a line into the root crontab to expire blocked IP addresses. I personally didn&rsquo;t do this since I want them to be blocked forever because It increases security and since I use RSA keys I will never type in a incorrect password. That being said if you want to add the line to make your blocked IPs expire you can do the following</p>
+<p>The last part of the sshlockout manpage&rsquo;s synopsis was to add a line into the root crontab to expire blocked IP addresses. I personally didn&rsquo;t do this since I want them to be blocked forever because It increases security. If you want to add the line to make your blocked IPs expire you can do the following:</p>
 <pre><code>doas crontab -e
 </code></pre>
-<p>Then add the following line to root&rsquo;s crontab</p>
+<p>Then add the following line to root&rsquo;s crontab:</p>
 <pre><code>3 3 * * *       pfctl -tlockout -T expire 86400
 </code></pre>
 </br>
@@ -133,10 +139,14 @@ block in quick on egress proto tcp from &lt;lockout&gt; to port 22
 <hr>
 <p>The way I tested if sshlockout is working is by trying to login from a different IP address. I VPN&rsquo;d into a Mullvad server and I moved my ssh keys into a different directory so the ssh command would not use them. I then tried to ssh into my server and for credentials I typed in random passwords with a random username. After 5 failed attempts when I try to use ssh it will just hang instead of asking for my credentials. To escape this it required user intervention with a Ctrl+C.</p>
 </br>
-<p>After I got banned I checked my public IP and then disconnecting from my VPN. I then moved my RSA keys back to ~/.ssh and then ssh&rsquo;d into my remote webserver and ran the command</p>
+<p>After I got banned I checked my public IP and then disconnecting from my VPN. I then moved my RSA keys back to ~/.ssh and then ssh&rsquo;d into my remote webserver and ran the command:</p>
 <pre><code>pfctl -t lockout -T show | grep my.vpn.ip.address
 </code></pre>
 <p>Sure enough it returned the VPN&rsquo;s IP address which confirmed to me that it had been added to the blocklist.</p>
+<h1 id="resources">Resources</h1>
+<hr>
+<p><a href="https://marc.info/?l=openbsd-misc&amp;m=150936166323062&amp;w=2">https://marc.info/?l=openbsd-misc&amp;m=150936166323062&amp;w=2</a></p>
+<p><a href="https://openports.pl/path/security/sshlockout">https://openports.pl/path/security/sshlockout</a></p>
 
     </div>
     <div class="post-footer">
