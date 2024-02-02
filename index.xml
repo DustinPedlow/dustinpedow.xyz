@@ -12,17 +12,8 @@
       <pubDate>Sun, 29 Oct 2023 20:52:22 -0500</pubDate>
       
       <guid>https://dustinpedlow.xyz/home/a-sshlockout-tutorial/</guid>
-      <description>This is a quick look at sshlockout and how to effectively use it to ban attackers.
-The sshlockout program is a extra layer of security that bans IP addresses that have reached a maximum threshold of failed password attempts. The sshlockout program originates from DragonFlyBSD and has been ported to OpenBSD. If you&amp;rsquo;re from the Linux world this is similar to Fail2Ban and is a very simple program. When sshlockout is setup using the settings shown in the manpage it will ban any IP address that exceeds 5 incorrect passwords in one hour.</description>
-    </item>
-    
-    <item>
-      <title>How to Setup a OpenBSD Website</title>
-      <link>https://dustinpedlow.xyz/home/how-to-setup-a-openbsd-website/</link>
-      <pubDate>Sun, 24 Sep 2023 22:10:39 -0500</pubDate>
-      
-      <guid>https://dustinpedlow.xyz/home/how-to-setup-a-openbsd-website/</guid>
-      <description>This is a simple tutorial on creating a website in the cloud using OpenBSD, HTTPD and HUGO. This is based on the same steps I used to create the website you&amp;rsquo;re reading this on. My main focus was on security, minimalism and reliability. I choose OpenBSD because It has amazing security settings out of the box and it&amp;rsquo;s very lightweight. This tutorial assumes you are a beginner but have some basic knowledge of DNS and unix commands.</description>
+      <description>This is a quick look at sshlockout and how to effectively use it to ban attackers on OpenBSD machines.
+The sshlockout program is a extra layer of security that bans IP addresses that have reached a maximum threshold of failed password attempts. The sshlockout program originates from DragonFlyBSD and has been ported to OpenBSD. If you&amp;rsquo;re from the Linux world this is similar to Fail2Ban and is a very simple program.</description>
     </item>
     
     <item>
