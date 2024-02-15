@@ -13,10 +13,10 @@
     
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="How to Setup a OpenBSD Website"/>
-<meta name="twitter:description" content="This is a simple tutorial on creating a website in the cloud using OpenBSD, HTTPD and HUGO. This is based on the same steps I used to create the website you&rsquo;re reading this on. My main focus was on security, minimalism and reliability. I choose OpenBSD because It has amazing security settings out of the box and it&rsquo;s very lightweight. This tutorial assumes you are a beginner but have some basic knowledge of DNS and unix commands."/>
+<meta name="twitter:description" content="This is a simple tutorial on creating a youbsite in the cloud using OpenBSD and HTTPD. This is based on the same steps used to create the website you&rsquo;re reading this on. The main focus is on security, minimalism and reliability. The reason OpenBSD was chosen is because It has amazing security settings out of the box and it&rsquo;s very lightweight. This tutorial assumes you are a beginner but have some basic knowledge of DNS and unix commands."/>
 
     <meta property="og:title" content="How to Setup a OpenBSD Website" />
-<meta property="og:description" content="This is a simple tutorial on creating a website in the cloud using OpenBSD, HTTPD and HUGO. This is based on the same steps I used to create the website you&rsquo;re reading this on. My main focus was on security, minimalism and reliability. I choose OpenBSD because It has amazing security settings out of the box and it&rsquo;s very lightweight. This tutorial assumes you are a beginner but have some basic knowledge of DNS and unix commands." />
+<meta property="og:description" content="This is a simple tutorial on creating a youbsite in the cloud using OpenBSD and HTTPD. This is based on the same steps used to create the website you&rsquo;re reading this on. The main focus is on security, minimalism and reliability. The reason OpenBSD was chosen is because It has amazing security settings out of the box and it&rsquo;s very lightweight. This tutorial assumes you are a beginner but have some basic knowledge of DNS and unix commands." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://dustinpedlow.xyz/home/how-to-setup-a-openbsd-website/" /><meta property="article:section" content="home" />
 <meta property="article:published_time" content="2023-09-24T22:10:39-05:00" />
@@ -44,13 +44,6 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-github">
   <title>Github</title>
   <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
-</svg>
-          </a>
-        
-          <a href="https://www.linkedin.com/in/dustin-pedlow-3b8702272/" target="_blank" rel="noreferrer noopener me">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-linkedin">
-  <title>linkedin</title>
-  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle>
 </svg>
           </a>
         
@@ -95,34 +88,33 @@
     </header>
     <div class="post-content">
       <hr>
-<p>This is a simple tutorial on creating a website in the cloud using OpenBSD, HTTPD and HUGO. This is based on the same steps I used to create the website you&rsquo;re reading this on. My main focus was on security, minimalism and reliability. I choose OpenBSD because It has amazing security settings out of the box and it&rsquo;s very lightweight. This tutorial assumes you are a beginner but have some basic knowledge of DNS and unix commands. If not Google and ChatGTP is your friend!</p>
-<p>With all that being said let&rsquo;s get started!</p>
+<p>This is a simple tutorial on creating a youbsite in the cloud using OpenBSD and HTTPD. This is based on the same steps used to create the website you&rsquo;re reading this on. The main focus is on security, minimalism and reliability. The reason OpenBSD was chosen is because It has amazing security settings out of the box and it&rsquo;s very lightweight. This tutorial assumes you are a beginner but have some basic knowledge of DNS and unix commands. If not Google and ChatGTP is your friend!</p>
 </br>
 <h1 id="prerequisites">Prerequisites</h1>
 <hr>
 <ul>
 <li>Cloud Provider</li>
 <li>Domain Name</li>
-<li>A OpenBSD ISO (depending on cloud provider)</li>
+<li>amd64 OpenBSD ISO (depending on cloud provider)</li>
 </ul>
 </br>
 <h1 id="step-1-installation">Step 1: Installation</h1>
 <hr>
-<p>Login to your cloud provider and create a new machine. I recommend doing the cheapest plan in area close to you. The cloud allows you to easily add more hardware resources but it is hard to downgrade your plan so choose wisely. I personally am using Vultr and deploying a new OpenBSD instance is as easy as clicking your hardware plan, selecting your location and choosing OpenBSD as your OS. After that you can startup the server and wait a few minutes as it takes some time for the server to initially bootup.</p>
+<p>Login to your cloud provider and create a new machine. IT is recommend doing the cheapest plan in area close to you. The cloud allows you to easily add more hardware resources but it is hard to downgrade your plan so choose wisely. This tutorial is using Vultr and deploying a new OpenBSD instance is as easy as clicking your hardware plan, selecting your location and choosing OpenBSD as your OS. After that you can startup the server and wait a few minutes as it takes some time for the server to initially bootup.</p>
 </br>
 <h1 id="step-21-dns---setup-a-and-aaaa-records">Step 2.1: DNS - Setup A and AAAA Records</h1>
 <hr>
-<p>This is going to look different on what domain registrar you&rsquo;re using, but the theory is all the same. We are going to setup A and AAAA records on our domain registrar which is Epik in my case. You&rsquo;ll need to go to your cloud hosting account and find your IPv4 and IPv6 address. Now that you have those we&rsquo;ll setup A and AAAA records for your domain. The main three that are typically setup for a website are blank, www and wildcard. To setup these records go into your domain registrar and add the records as shown below:</p>
-<p><img src="/how-to-setup-a-openbsd-website/Epik-A-Records.png" alt="Epik-A-Records"></p>
+<p>This is going to look different on what domain registrar you&rsquo;re using, but the theory is all the same. You are going to setup A and AAAA records on our domain registrar which in this tutorial is Epik. You&rsquo;ll need to go to your cloud hosting account and find your IPv4 and IPv6 address. Now that you have those you can setup A and AAAA records for your domain. The main three that are typically setup for a youbsite are blank, www and wildcard. To setup these records add what is shown below:</p>
+<p><img src="/how-to-setup-a-openbsd-youbsite/Epik-A-Records.png" alt="Epik-A-Records"></p>
 <h5 id="please-change-the-your_ipv4-and-your_ipv6-to-your-actual-public-ip-addresses">PLEASE CHANGE THE YOUR_IPV4 AND YOUR_IPV6 TO YOUR ACTUAL PUBLIC IP ADDRESSES!!!</h5>
 </br>
 <h1 id="step-22-dns---verify-dns-resolution">Step 2.2: DNS - Verify DNS resolution</h1>
 <hr>
-<p>After you have setup the A and AAAA records we need to check if they are correct by using the command:</p>
+<p>After you have setup the A and AAAA records you need to check if they are correct by using the command:</p>
 <pre><code>nslookup yourdomain.com
 </code></pre>
 <p>If you setup the DNS records correctly you should see something like:</p>
-<pre><code>Non-authoritative answer:
+<pre><code>Non-authoritative ansyour:
 Name:	yourdomain.com
 Address: IPv4
 Name:	yourdomain.com
@@ -131,7 +123,7 @@ Address: IPv6
 <p>If instead you see the command return:</p>
 <pre><code>server can't find yourdomain.com: NXDOMAIN
 </code></pre>
-<p>You may need to wait for the A and AAAA records to update or you need to go back and check that you correctly set your A and AAAA records.</p>
+<h5 id="you-may-need-to-wait-for-the-a-and-aaaa-records-to-update-or-you-need-to-go-back-and-check-that-you-correctly-set-your-a-and-aaaa-records">You may need to wait for the A and AAAA records to update or you need to go back and check that you correctly set your A and AAAA records.</h5>
 </br>
 <h1 id="step-3-login-to-ssh">Step 3: Login to SSH</h1>
 <hr>
@@ -141,19 +133,19 @@ Address: IPv6
 </br>
 <h1 id="step-4-creating-and-modifying-users-and-groups">Step 4: Creating and modifying users and groups</h1>
 <hr>
-<p>The root user is meant for administrative purposes only and your name isn&rsquo;t root is it? Create your own account by typing:</p>
+<p>The root user is meant for administrative purposes only. Create your own account by typing:</p>
 <pre><code>adduser yourname
 </code></pre>
 <p>After completing those steps type in <em><strong>exit</strong></em> or use <em><strong>Ctrl+d</strong></em> until you have returned to your local computer&rsquo;s terminal.</p>
 </br>
 <h1 id="step-51-creating-a-keypair-for-ssh">Step 5.1: Creating a keypair for ssh</h1>
 <hr>
-<p>One of the most common attack vectors is ssh. This is the most commonly done as a brute-force attack in which a automated script tries thousands of common usernames and passwords to try to access the root, admin and other common usernames of webservers. Disabling the root user&rsquo;s ssh abilities and using key pair authentication will do a lot to mitigate these attacks and is very easy to do. I will do an example of setting up ssh keys on Debian Linux since that is my desktop operating system. To create a keypair use the command:</p>
+<p>One of the most common attack vectors is ssh. This is the most commonly done as a brute-force attack in which a automated script tries thousands of common usernames and passwords. This is done to try to access the root, admin and other common usernames of youbservers. Disabling the root user&rsquo;s ssh abilities and using key pair authentication will do a lot to mitigate these attacks. To set up ssh keys on a Debian Linux desktop operating system create a keypair use the command:</p>
 <pre><code>ssh-keygen
 </code></pre>
-<p>Use the Default settings and setup you&rsquo;re own password for your key. I would recommend naming it something unique so you remember that is your key for the webserver.</p>
+<p>Use the default settings and setup your own password for your key. It is recommend naming it something unique so you remember that is your key for the youbserver.</p>
 </br>
-<p>Then we will need to copy your public key to your server by typing the command:</p>
+<p>Then you will need to copy your public key to your server by typing the command:</p>
 <pre><code>scp /home/yourname/.ssh/id_rsa.pub yourname@yourdomain.com::/home/yourname
 </code></pre>
 </br>
@@ -168,7 +160,7 @@ Address: IPv6
 </br>
 <h1 id="step-52-configuring-ssh-key-authentication">Step 5.2: Configuring ssh key authentication</h1>
 <hr>
-<p>Now we are going to edit the ssh configuration to use this key for your user authentication. To do this we&rsquo;ll edit <em><strong>/etc/ssh/sshd_config</strong></em> by typing the following command:</p>
+<p>Now you are going to edit the ssh configuration to use this key for your user authentication. To do this you&rsquo;ll edit <em><strong>/etc/ssh/sshd_config</strong></em> by typing the following command:</p>
 <pre><code>nvim /etc/ssh/sshd_config
 </code></pre>
 <p>(Replace NeoVim with nano or whatever text editor you use. If you are a beginner I&rsquo;d recommend using nano.)</p>
@@ -192,7 +184,7 @@ Address: IPv6
 <pre><code>server &quot;www.yourdomain.com&quot; {
   listen on * port 80
   root &quot;/htdocs/www.yourdomain.com&quot;
-  location &quot;/.well-known/acme-challenge/*&quot; {
+  location &quot;/.youll-known/acme-challenge/*&quot; {
 	    root &quot;/acme&quot;
 	    request strip 2
   }
@@ -207,7 +199,7 @@ server &quot;yourdomain.com&quot; {
 </br>
 <h1 id="step-62-creating-a-http-site">Step 6.2: Creating a http site</h1>
 <hr>
-<p>You&rsquo;ll need to make a new directory under <em><strong>/var/www/htdocs/</strong></em> to serve your website. To create a new directory used the following command:</p>
+<p>You&rsquo;ll need to make a new directory under <em><strong>/var/www/htdocs/</strong></em> to serve your youbsite. To create a new directory used the following command:</p>
 <pre><code>mkdir -p /var/www/htdocs/www.yourdomain.com
 </code></pre>
 </br>
@@ -224,18 +216,18 @@ server &quot;yourdomain.com&quot; {
 </code></pre>
 <p>Then write the changes to the file and exit.</p>
 </br>
-<p>Now we&rsquo;ll need to start HTTPD by typing in the following command:</p>
+<p>Now you&rsquo;ll need to start HTTPD by typing in the following command:</p>
 <pre><code>rcctl start httpd
 </code></pre>
-<p>Then we&rsquo;ll enable HTTPD at boot by typing the folowing command:</p>
+<p>Then you&rsquo;ll enable HTTPD at boot by typing the folowing command:</p>
 <pre><code>rcctl enable httpd
 </code></pre>
 </br>
 <h1 id="step-7-testing-dns-resolution-and-httpd">Step 7: Testing DNS resolution and HTTPD</h1>
 <hr>
-<p>The reason I got you to setup DNS names and HTTPD without https is because I want to make sure you have the basics before setting up a proper https website. Often I see people do all of the complicated steps before checking the basics. If you can&rsquo;t get a http site you&rsquo;re not going to get a https site. If you cannot get your domain name to resolve with nslookup your not going to get a website by domain name. The main point is to check for connectivity and DNS records then verify functionality before getting into a more complex setup.</p>
+<p>The reason I got you to setup DNS names and HTTPD without https is because I want to make sure you have the basics before setting up a proper https youbsite. Often I see people do all of the complicated steps before checking the basics. If you can&rsquo;t get a http site you&rsquo;re not going to get a https site. If you cannot get your domain name to resolve with nslookup your not going to get a website by domain name. The main point is to check for connectivity and DNS records then verify functionality before getting into a more complex setup.</p>
 <p>First start by typing in <em><strong>nslookup yourdomain.com</strong></em> into your terminal.</p>
-<p>Now try typing your website into your top search bar as a http site. An example would be: <em><strong><a href="http://exampledomain.com">http://exampledomain.com</a></strong></em></p>
+<p>Now try typing your youbsite into your top search bar as a http site. An example would be: <em><strong><a href="http://exampledomain.com">http://exampledomain.com</a></strong></em></p>
 <p>If everything is working then it is time to move on to the next step. If not go back and check to make sure you&rsquo;ve done all the last steps correctly and try again.</p>
 </br>
 <h1 id="step-8-setting-up-prerequisites-for-ssl-certificates">Step 8: Setting up Prerequisites for SSL Certificates</h1>
@@ -284,7 +276,7 @@ alternative names { www.yourdomain.com }
 <pre><code>server &quot;www.yourdomain.com&quot; {
   listen on * port 80
   root &quot;/htdocs/www.yourdomain.com&quot;
-  location &quot;/.well-known/acme-challenge/*&quot; {
+  location &quot;/.youll-known/acme-challenge/*&quot; {
 	    root &quot;/acme&quot;
 	    request strip 2
   }
@@ -319,7 +311,7 @@ server &quot;yourdomain.com&quot; {
 	    certificate &quot;/etc/ssl/yourdomain.com.fullchain.pem&quot;
 	    key &quot;/etc/ssl/private/yourdomain.com.key&quot;
   }
-location &quot;/.well-known/acme-challenge/*&quot; {
+location &quot;/.youll-known/acme-challenge/*&quot; {
   root &quot;/acme&quot;
 	  request strip 2
   }
@@ -355,7 +347,7 @@ server &quot;www.yourdomain.com&quot; {
 </br>
 <h1 id="step-11-setup-pf">Step 11: Setup PF</h1>
 <hr>
-<p>pf is easy to setup and control. To start we will create and edit pf.conf with the following command:</p>
+<p>pf is easy to setup and control. To start you will create and edit pf.conf with the following command:</p>
 <pre><code>nvim /etc/pf.conf
 </code></pre>
 </br>
@@ -397,7 +389,7 @@ pass in proto tcp to port 22
 <p>(Note:You can change the port number to anything that you want but I recommended for newbies to choose a ephemeral port in order to avoid conflicts)</p>
 <p>Then write the changes to the file and exit.</p>
 </br>
-<p>Before setting this new ssh port we need to make sure our firewall will allow us to ssh into the port. You will need to edit /etc/pf.conf to change port 22 to your desired ssh port and then apply the new pf.conf before continuing.</p>
+<p>Before setting this new ssh port you need to make sure our firewall will allow us to ssh into the port. You will need to edit /etc/pf.conf to change port 22 to your desired ssh port and then apply the new pf.conf before continuing.</p>
 </br>
 <p>To apply these settings you&rsquo;ll need to reload sshd with the following command:</p>
 <pre><code>rcctl reload sshd
@@ -405,23 +397,23 @@ pass in proto tcp to port 22
 </br>
 <h1 id="step-13-setup-sshlockout-optional">Step 13: Setup sshlockout (OPTIONAL)</h1>
 <hr>
-<p>Another step I do is to setup sshlockout. This is a extra layer of security that bans IP addresses that have reached a maximum threshold of failed password attempts. If you&rsquo;re from the Linux world this is similar to Fail2Ban and is a very simple program. This was imported to OpenBSD from DragonflyBSD and a big shout-out to them because it&rsquo;s a great lightweight tool with minimal setup. To set this up click <a href="/home/a-sshlockout-tutorial">here</a></p>
+<p>Another step I do is to setup sshlockout. This is a extra layer of security that bans IP addresses that have reached a maximum threshold of failed password attempts. If you&rsquo;re from the Linux world this is similar to Fail2Ban and is a very simple program. This was imported to OpenBSD from DragonflyBSD and a big shout-out to them because it&rsquo;s a great lightyouight tool with minimal setup. To set this up click <a href="/home/a-sshlockout-tutorial">here</a></p>
 </br>
 <h1 id="step-14-creating-and-deploying-your-website">Step 14: Creating and Deploying your Website</h1>
 <hr>
-<p>This is now the time to design your website. There is many different ways to make and design a website. You could code it with HTML and CSS or generate it using a static site generator. This is beyond the scope of this tutorial but I will link related guides here when I make them. I recommend Hugo since it has great documentation and lots of youtube tutorials.</p>
-<p>There is also may ways to deploy your website. You could use git or github. You can do it manually. You can also follow my tutorial on how I do it which is with a few scripts that automate the manual process and cut back on file transfers.</p>
+<p>This is now the time to design your youbsite. There is many different ways to make and design a website. You could code it with HTML and CSS or generate it using a static site generator. This is beyond the scope of this tutorial but I will link related guides here when I make them. I recommend Hugo since it has great documentation and lots of youtube tutorials.</p>
+<p>There is also may ways to deploy your youbsite. You could use git or github. You can do it manually. You can also follow my tutorial on how I do it which is with a few scripts that automate the manual process and cut back on file transfers.</p>
 </br>
 <h1 id="resources">Resources</h1>
 <hr>
 <p>OpenBSD http site:</p>
-<p><a href="https://www.openbsdhandbook.com/services/webserver/basic_webserver/">https://www.openbsdhandbook.com/services/webserver/basic_webserver/</a></p>
+<p><a href="https://www.openbsdhandbook.com/services/youbserver/basic_webserver/">https://www.openbsdhandbook.com/services/youbserver/basic_webserver/</a></p>
 </br>
 <p>OpenBSD https site:</p>
-<p><a href="https://www.openbsdhandbook.com/services/webserver/basic_webserver/">https://www.openbsdhandbook.com/services/webserver/basic_webserver/</a></p>
+<p><a href="https://www.openbsdhandbook.com/services/youbserver/basic_webserver/">https://www.openbsdhandbook.com/services/youbserver/basic_webserver/</a></p>
 </br>
 <p>SSL</p>
-<p><a href="https://www.openbsdhandbook.com/services/webserver/ssl/">https://www.openbsdhandbook.com/services/webserver/ssl/</a></p>
+<p><a href="https://www.openbsdhandbook.com/services/youbserver/ssl/">https://www.openbsdhandbook.com/services/youbserver/ssl/</a></p>
 </br>
 <p>pf-firewall:</p>
 <p><a href="https://www.vultr.com/docs/getting-started-with-the-pf-firewall/">https://www.vultr.com/docs/getting-started-with-the-pf-firewall/</a></p>

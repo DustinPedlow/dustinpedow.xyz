@@ -12,7 +12,7 @@
       <pubDate>Sun, 24 Sep 2023 22:10:39 -0500</pubDate>
       
       <guid>https://dustinpedlow.xyz/home/how-to-setup-a-openbsd-website/</guid>
-      <description>This is a simple tutorial on creating a website in the cloud using OpenBSD, HTTPD and HUGO. This is based on the same steps I used to create the website you&amp;rsquo;re reading this on. My main focus was on security, minimalism and reliability. I choose OpenBSD because It has amazing security settings out of the box and it&amp;rsquo;s very lightweight. This tutorial assumes you are a beginner but have some basic knowledge of DNS and unix commands.</description>
+      <description>This is a simple tutorial on creating a youbsite in the cloud using OpenBSD and HTTPD. This is based on the same steps used to create the website you&amp;rsquo;re reading this on. The main focus is on security, minimalism and reliability. The reason OpenBSD was chosen is because It has amazing security settings out of the box and it&amp;rsquo;s very lightweight. This tutorial assumes you are a beginner but have some basic knowledge of DNS and unix commands.</description>
     </item>
     
   </channel>
