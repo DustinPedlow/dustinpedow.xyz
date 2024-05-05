@@ -21,8 +21,8 @@ The sshlockout program is a extra layer of security that bans IP addresses that 
 The sshlockout program is a extra layer of security that bans IP addresses that have reached a maximum threshold of failed password attempts. The sshlockout program originates from DragonFlyBSD and has been ported to OpenBSD. If you&rsquo;re from the Linux world this is similar to Fail2Ban and is a very simple program." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://dustinpedlow.xyz/home/a-sshlockout-tutorial/" /><meta property="article:section" content="home" />
-<meta property="article:published_time" content="2023-10-29T20:52:22-05:00" />
-<meta property="article:modified_time" content="2023-10-29T20:52:22-05:00" />
+<meta property="article:published_time" content="2024-05-04T20:52:22-05:00" />
+<meta property="article:modified_time" content="2024-05-04T20:52:22-05:00" />
 
 
   </head>
@@ -69,7 +69,7 @@ The sshlockout program is a extra layer of security that bans IP addresses that 
   <title>calendar</title>
   <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line>
 </svg>
-          Oct 29, 2023
+          May 4, 2024
         </div>
         <div>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-clock">
@@ -100,40 +100,39 @@ The sshlockout program is a extra layer of security that bans IP addresses that 
 <pre><code>pkg_add sshlockout
 </code></pre>
 </br>
-<p>Now that sshlockout is installed confiuration is required. In order to start sshlockout setup the pf configuration to use sshlockout. To get this working do the following steps:</p>
-<p>Add</p>
+<p>To setup the correct permissions edit <em><strong>/etc/doas.conf</strong></em> and add the following:</p>
+<pre><code>permit nopass _syslogd as root cmd /usr/sbin/sshlockout
+</code></pre>
+</br>
+<p>Now that sshlockout is installed confiuration is required. You will need to add a PF table and a rule to block the table. Edit to the bottom of <em><strong>/etc/pf.conf</strong></em> the follwing:</p>
 <pre><code>table &lt;lockout&gt; persist
 block in quick on egress proto tcp from &lt;lockout&gt; to port 22
 </code></pre>
-<p>onto the end of <em>/etc/pf.conf</em> configuration.</p>
 </br>
-<p>Tested <em>pf.conf</em> to make sure there are <strong>no errors</strong> with the command:</p>
-<pre><code>pf -n -f /etc/pf.conf
+<p>To test and then apply the new PF table and rule run the following command:</p>
+<pre><code>pf -n -f /etc/pf.conf &amp;&amp; pfctl -f /etc/pf.conf
 </code></pre>
-<p>If you <strong>didn&rsquo;t get any errors</strong> output it is good and you can <em>reloaded pf</em> with the new config using:</p>
-<pre><code>pfctl -f /etc/pf.conf
-</code></pre>
-<p>Then add:</p>
+<p>Edit <em><strong>/etc/syslog.conf</strong></em> and for logging purposes add the following:</p>
 <pre><code>auth.info;authpriv.info | exec /usr/bin/doas -n /usr/local/sbin/sshlockout -pf &quot;lockout&quot;
 </code></pre>
-<p>into <em>/etc/syslog.conf</em> for <strong>logging purposes</strong>.</p>
 </br>
-<p>The last part of the sshlockout is to add a line into the root crontab to expire blocked IP addresses. This is <strong>optional</strong> and if you don&rsquo;t do it IPs will be blocked forever and will need to be manually unbanned. If you want to add the line to make your <em>blocked IPs expire</em> you can do the following:</p>
+<p>The last part of the sshlockout is to add a line into the root crontab to expire blocked IP addresses do the following command:</p>
 <pre><code>doas crontab -e
 </code></pre>
 <p>Then add the following line to root&rsquo;s crontab:</p>
-<pre><code>3 3 * * *       pfctl -tlockout -T expire 86400
+<pre><code>3 3 * * * pfctl -tlockout -T expire 4294967295
 </code></pre>
+<p>The number set to expire is in seconds. Change it to the preferred amount of time you would like to block malicious public IPs for.</p>
 </br>
 <h1 id="testing">Testing</h1>
 <hr>
-<p>The way to test if sshlockout is working is by trying to login from a different IP address. You can <em>VPN</em> into a server and <strong>move your ssh keys into a different directory</strong> so the ssh command will not use them. Then you can try to ssh into your server and for credentials I type in random passwords with a random username. <strong>After 5 failed attempts</strong> when you try to use ssh it will just <em>hang instead of asking for credentials</em>. To escape this it required user intervention with a <em>Ctrl+C</em>.</p>
+<p>The way to test if sshlockout is working is by trying to login from a different IP address. You can <em>VPN</em> into a server and <strong>move your ssh keys into a different directory</strong> so the ssh command will not use them. Then you can try to ssh into your server and with random credentials. <strong>After 5 failed attempts</strong> when you try to use ssh it will just <em>hang instead of asking for credentials</em>. To escape this it required user intervention with a <em>Ctrl+C</em>.</p>
 </br>
 <p>After getting banned you should check you <strong>public IP while your VPN connection is active</strong>. Then <em>disconnect</em> from your <em>VPN</em> and <strong>move your RSA keys back to ~/.ssh</strong>. Now you can <em>ssh into your remote webserver</em> and run the command:</p>
 <pre><code>pfctl -t lockout -T show | grep your.vpn.ip.address
 </code></pre>
 <p>Now it will <strong>returned the VPN&rsquo;s IP address</strong> which confirms that it has been added to the blocklist.</p>
-<h1 id="resources">Resources</h1>
+<h1 id="helpful-resources">Helpful Resources</h1>
 <hr>
 <p><a href="https://marc.info/?l=openbsd-misc&amp;m=150936166323062&amp;w=2">https://marc.info/?l=openbsd-misc&amp;m=150936166323062&amp;w=2</a></p>
 <p><a href="https://openports.pl/path/security/sshlockout">https://openports.pl/path/security/sshlockout</a></p>
