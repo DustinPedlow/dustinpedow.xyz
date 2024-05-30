@@ -99,29 +99,32 @@ The sshlockout program is a extra layer of security that bans IP addresses that 
 <p>The initial installation is done with OpenBSD&rsquo;s package manager as the <em>root user</em> or with <em>root privileges</em> using the command:</p>
 <pre><code>pkg_add sshlockout
 </code></pre>
-</br>
+<br/>
 <p>To setup the correct permissions edit <em><strong>/etc/doas.conf</strong></em> and add the following:</p>
 <pre><code>permit nopass _syslogd as root cmd /usr/sbin/sshlockout
 </code></pre>
-</br>
-<p>Now that sshlockout is installed confiuration is required. You will need to add a PF table and a rule to block the table. Edit to the bottom of <em><strong>/etc/pf.conf</strong></em> the follwing:</p>
+<br/>
+<p>Now that sshlockout is installed confiuration is required. You will need to add a PF table and a rule to block the table. Edit to the bottom of <em><strong>/etc/pf.conf</strong></em> the following:</p>
 <pre><code>table &lt;lockout&gt; persist
 block in quick on egress proto tcp from &lt;lockout&gt; to port 22
 </code></pre>
-</br>
+<br/>
 <p>To test and then apply the new PF table and rule run the following command:</p>
 <pre><code>pf -n -f /etc/pf.conf &amp;&amp; pfctl -f /etc/pf.conf
 </code></pre>
+<br/>
 <p>Edit <em><strong>/etc/syslog.conf</strong></em> and for logging purposes add the following:</p>
 <pre><code>auth.info;authpriv.info | exec /usr/bin/doas -n /usr/local/sbin/sshlockout -pf &quot;lockout&quot;
 </code></pre>
-</br>
+<br/>
 <p>The last part of the sshlockout is to add a line into the root crontab to expire blocked IP addresses do the following command:</p>
 <pre><code>doas crontab -e
 </code></pre>
+<br/>
 <p>Then add the following line to root&rsquo;s crontab:</p>
 <pre><code>3 3 * * * pfctl -tlockout -T expire 4294967295
 </code></pre>
+<br/>
 <p>The number set to expire is in seconds. Change it to the preferred amount of time you would like to block malicious public IPs for.</p>
 </br>
 <h1 id="testing">Testing</h1>
